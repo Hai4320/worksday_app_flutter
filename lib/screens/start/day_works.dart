@@ -20,7 +20,7 @@ class _DayWorksState extends State<DayWorks> {
       height: 450,
       margin: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
       child: ListView.builder(
-        itemCount: tasks_day.length,
+        itemCount: tasks_day.length-1,
         itemBuilder:(context, index) =>  createTaskItem(index)
       )
     );
@@ -139,10 +139,6 @@ class _DayWorksState extends State<DayWorks> {
                 margin: const EdgeInsets.only(right:10),
                 child: CustomCheckbox(taskDone, 25, 20, AppColors.green, AppColors.white)
               )
-
-
-
-
             ],  
             )
         );

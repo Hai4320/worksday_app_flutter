@@ -3,6 +3,7 @@ import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/themes/images.dart';
 import 'package:worksday_app/widgets/stateless/app_title.dart';
 import 'package:worksday_app/screens/start/day_works.dart';
+import 'package:worksday_app/screens/start/week_works.dart';
 import 'package:intl/intl.dart';
 class Start extends StatefulWidget {
   const Start({ Key? key }) : super(key: key);
@@ -12,9 +13,17 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start>{
+  
   List timePage = ["Day", "Week", "Month"];
   DateTime  now = DateTime.now();
   DateFormat formatter1 = DateFormat('LLL dd, yyyy');
+  renderPage(int index){
+    switch(index) {
+      case 0: return const DayWorks();
+      case 1: return const WeekWorks();
+      default: return const DayWorks();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +79,7 @@ class _StartState extends State<Start>{
                     child: Text(formatter1.format(now), style: const TextStyle(color: Colors.white, fontSize: 20),)
                   )
                   ,
-                  DayWorks(),
+                  renderPage(indexPage)
                   
                 ],
               )

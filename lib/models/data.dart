@@ -1,7 +1,8 @@
 import 'package:worksday_app/models/task_model.dart';
-
+import 'package:intl/intl.dart';
 class AppDatas{
   static List<Task> task_data = [
+    Task(0, "0", "Công việc X", "Home", 2, 5),
     Task(1, "0", "Họp nhóm ABC", "School", 1, 5),
     Task(2, "0", "Mua thức ăn", "Home", 2, -1),
     Task(3, "0", "Check mail", "Home", 3, -1),
