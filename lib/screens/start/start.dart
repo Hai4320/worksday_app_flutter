@@ -4,6 +4,7 @@ import 'package:worksday_app/themes/images.dart';
 import 'package:worksday_app/widgets/stateless/app_title.dart';
 import 'package:worksday_app/screens/start/day_works.dart';
 import 'package:worksday_app/screens/start/week_works.dart';
+import 'package:worksday_app/screens/start/month_works.dart';
 import 'package:intl/intl.dart';
 class Start extends StatefulWidget {
   const Start({ Key? key }) : super(key: key);
@@ -21,6 +22,7 @@ class _StartState extends State<Start>{
     switch(index) {
       case 0: return const DayWorks();
       case 1: return const WeekWorks();
+      case 2: return const MonthWorks();
       default: return const DayWorks();
     }
   }
