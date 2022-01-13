@@ -8,16 +8,18 @@ void main() {
 
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primaryColor: AppColors.primary,
       ),
       routes: {
-        '/': (context) => Start(),
-        '/App': (context) => AppWithNav(),
+        '/': (context) => const Start(),
+        '/App': (context) => const AppWithNav(),
       },
       initialRoute: '/',
     );

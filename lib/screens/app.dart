@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/widgets/stateful/navbar.dart';
 
 
@@ -21,12 +22,22 @@ class _AppWithNavState extends State<AppWithNav> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      body: Center(
-        child: Text(Tab[indexTab]),
-      ),
-      bottomNavigationBar: NavBar(
-        indexTab: indexTab,
-        onChangedTab: onChangedTab,
+      body: Container(
+        child: Stack(
+          children: [
+            Center(
+              
+              child: Text(
+                Tab[indexTab],
+                style: TextStyle(color: AppColors.black),
+                ),
+            ),
+            NavBar(
+              indexTab: indexTab,
+              onChangedTab: onChangedTab,
+            ),
+          ],
+        ),
       ),
 
     );

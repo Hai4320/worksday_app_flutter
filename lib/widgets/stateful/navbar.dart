@@ -12,13 +12,12 @@ class NavBar extends StatefulWidget{
 class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: _getNavBar(context),
-    );
+    return _getNavBar(context);
   }
 
   _getNavBar(context){
-    return Stack(children: <Widget>[
+    return Stack(
+      children: <Widget>[
       Positioned(
         bottom: 0,
         child: ClipPath(
@@ -40,6 +39,7 @@ class _NavBarState extends State<NavBar> {
         ))
     ,
     Positioned(
+      
       bottom: 45,
       width: MediaQuery.of(context).size.width,
       child: Row(
