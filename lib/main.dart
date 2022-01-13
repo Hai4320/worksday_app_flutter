@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:worksday_app/routes/routes.dart';
 import 'package:worksday_app/screens/start/start.dart';
 import 'package:worksday_app/themes/color.dart';
+import 'package:worksday_app/screens/app.dart';
 void main() {
   runApp(MyApp());
 }
@@ -15,7 +15,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: Start()
+      routes: {
+        '/': (context) => Start(),
+        '/App': (context) => AppWithNav(),
+      },
+      initialRoute: '/',
     );
   }
 }

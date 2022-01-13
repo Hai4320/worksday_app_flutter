@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:worksday_app/themes/color.dart';
 class NavBar extends StatefulWidget{
+  final int indexTab;
+  final ValueChanged<int> onChangedTab;
+
+  const NavBar({Key? key, required this.indexTab, required this.onChangedTab}) : super(key: key);
   @override
   State<NavBar> createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  int tabActive = 0;
-  void setNavBarActive(int x){
-    setState(() {
-      tabActive = x;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +31,8 @@ class _NavBarState extends State<NavBar> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.indigo,
-                  Colors.indigo.shade800,
+                  AppColors.primary,
+                  AppColors.green,
                 ]
               )
             ),
@@ -47,29 +45,31 @@ class _NavBarState extends State<NavBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildNavItem(Icons.home,tabActive == 0, 0),
-          SizedBox(width: 1),
-          _buildNavItem(Icons.add,tabActive == 1, 1),
-          SizedBox(width: 1),
-          _buildNavItem(Icons.settings,tabActive == 2, 2),
+          _buildNavItem(Icons.home, 0),
+          const SizedBox(width: 1),
+          _buildNavItem(Icons.add, 1),
+          const SizedBox(width: 1),
+          _buildNavItem(Icons.settings, 2),
         ],
         )
     )]);
   }
 
 // Nav buttons 
-  _buildNavItem(IconData icon, bool active, int num) {
-    return RawMaterialButton(
-      shape: CircleBorder(),
-      fillColor: active? Colors.indigo.shade800: Colors.white,
-      onPressed: ()=>{ setNavBarActive(num)},
+  _buildNavItem(IconData icon, int num) {
+
+    bool active = widget.indexTab == num;
+    return RawMaterialButton( 
+      shape: const CircleBorder(),
+      fillColor: active? AppColors.primary: AppColors.white,
+      onPressed: () => widget.onChangedTab(num),
       child: CircleAvatar(
         radius: active ? 30: 17,
-        backgroundColor: active? Colors.indigo.shade500 : Colors.indigo.shade500,
+        backgroundColor: active? AppColors.white : AppColors.primary,
         child: CircleAvatar(
             radius: active ? 30: 15,
-            backgroundColor: active?  Colors.indigo.shade500  : Colors.white,
-            child: Icon(icon, color: active? Colors.white : Colors.indigo.shade500),
+            backgroundColor: active?  AppColors.primary  : AppColors.white,
+            child: Icon(icon, color: active? AppColors.white : AppColors.primary),
           ),
       ),
     );

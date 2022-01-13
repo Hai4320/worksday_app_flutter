@@ -6,6 +6,7 @@ import 'package:worksday_app/screens/start/day_works.dart';
 import 'package:worksday_app/screens/start/week_works.dart';
 import 'package:worksday_app/screens/start/month_works.dart';
 import 'package:intl/intl.dart';
+import 'package:worksday_app/screens/app.dart';
 class Start extends StatefulWidget {
   const Start({ Key? key }) : super(key: key);
 
@@ -52,7 +53,9 @@ class _StartState extends State<Start>{
                   Container(
                     alignment: Alignment.topLeft,
                     child: InkWell(
-                      onTap: (){},
+                      onTap: (){
+                        Navigator.pushNamed(context, "/App");
+                      },
                       child: const Icon(Icons.notes, color: Colors.white, size: 30),
                     )
                   ),
