@@ -59,11 +59,17 @@ class _MonthWorksState extends State<MonthWorks> {
             ),
             Container(
               margin: const EdgeInsets.only(left: 8, top: 2, right: 8, bottom: 2),
-              child: Text(
-                listTask[indexItem].taskname, 
-                style: const TextStyle(
-                  fontSize: 15, 
-                )  
+              child: Card(
+                child: ListTile(
+
+                  title: Text(
+                    listTask[indexItem].taskname, 
+                    style: const TextStyle(
+                      fontSize: 15, 
+                    )  
+                  ),
+                  subtitle: const Text("08:00 AM",),
+                ),
               ),
             )
           ],

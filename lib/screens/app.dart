@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/widgets/stateful/navbar.dart';
+import 'package:worksday_app/screens/add.dart';
+import 'package:worksday_app/screens/home.dart';
+import 'package:worksday_app/screens/setting.dart';
 
 
 class AppWithNav extends StatefulWidget {
@@ -11,8 +14,15 @@ class AppWithNav extends StatefulWidget {
 }
 
 class _AppWithNavState extends State<AppWithNav> {
-  List<String> Tab = ["Home","Add","Setting"];
   int indexTab = 0;
+  renderTab(int index) {
+    switch(index) {
+      case 0: return const Home();
+      case 1: return const Add();
+      case 2: return const Setting();
+      default: return const Home();
+    }
+  }
   onChangedTab(int x){
     
     setState((){  
@@ -25,13 +35,7 @@ class _AppWithNavState extends State<AppWithNav> {
       body: Container(
         child: Stack(
           children: [
-            Center(
-              
-              child: Text(
-                Tab[indexTab],
-                style: TextStyle(color: AppColors.black),
-                ),
-            ),
+            renderTab(indexTab),
             NavBar(
               indexTab: indexTab,
               onChangedTab: onChangedTab,
