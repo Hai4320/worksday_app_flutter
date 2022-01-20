@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/widgets/stateful/navbar.dart';
 import 'package:worksday_app/screens/add.dart';
 import 'package:worksday_app/screens/home.dart';

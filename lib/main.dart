@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:worksday_app/screens/start/start.dart';
 import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/screens/app.dart';
+import 'package:worksday_app/screens/form_add.dart';
 void main() {
   runApp(MyApp());
 }
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Start(),
         '/App': (context) => const AppWithNav(),
+        '/AddTask': (context) => const AddForm(),
       },
       initialRoute: '/',
     );

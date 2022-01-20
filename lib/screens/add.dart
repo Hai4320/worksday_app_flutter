@@ -9,10 +9,10 @@ class Add extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Map> add_list = [
-      {"name": 'Nomal create', "icon": Icons.add, "color":AppColors.safe},
-      {"name": 'Advanced create', "icon": Icons.note_add, "color":AppColors.safe},
-      {"name": 'Voice create', "icon": Icons.mic, "color":AppColors.safe},
-      {"name": 'With media create', "icon": Icons.photo_camera_back, "color":AppColors.safe},
+      {"name": 'Nomal create', "icon": Icons.add, "color":AppColors.safe, "action": "/AddTask"},
+      {"name": 'Advanced create', "icon": Icons.note_add, "color":AppColors.safe,"action":"/AddTask"},
+      {"name": 'Voice create', "icon": Icons.mic, "color":AppColors.safe,"action": "/AddTask"},
+      {"name": 'With media create', "icon": Icons.photo_camera_back, "color": AppColors.safe,"action": "/AddTask"},
     ];
     var xxx = {
       "name": 'Nomal create', "icon": Icons.add, "color":AppColors.safe
@@ -44,11 +44,13 @@ class Add extends StatelessWidget {
                   return Padding(
                     padding: EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Card(
+                  
                       child: ListTile(
                         iconColor: add_list[idx]["color"],
                         leading: Icon(add_list[idx]["icon"]),
                         title: Text(add_list[idx]["name"]),
-                        trailing: const Icon(Icons.navigate_next)
+                        trailing: const Icon(Icons.navigate_next),
+                        onTap: ()=> Navigator.pushNamed(context, add_list[idx]["action"]),
                       ),
                     ),
                   );
