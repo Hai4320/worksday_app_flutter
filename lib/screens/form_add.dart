@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:worksday_app/themes/color.dart';
+import 'package:intl/intl.dart';
 
 class AddForm extends StatefulWidget {
   const AddForm({ Key? key }) : super(key: key);
@@ -10,23 +12,284 @@ class AddForm extends StatefulWidget {
 
 class _AddFormState extends State<AddForm> {
   int stepIndex = 0 ;
-  List alltype = [
+  TextEditingController task_name = TextEditingController();
+  int task_type = 0;
+  int task_priority = 3;
+  DateTime task_time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateFormat time_format = DateFormat.jm();
+  int task_repeat = 0;
+  List allRepeats = ["None","Daily","Weekly","Monthly"];
+  List allDayOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  List allDayOfWeekValue = [true, false, false, false, false, false, false];
+  List allDayOfMonth = List<String>.generate(31, (index) => (index+1).toString());
+  List allDayOfMonthValue = List<bool>.generate(31, (index) => false);
+  List allType = [
     {"name":"Personal", "icon": Icons.person}, 
     {"name":"Home", "icon": Icons.person}, 
     {"name":"Work", "icon": Icons.person}, 
     {"name":"Community", "icon": Icons.person},
     {"name":"Others", "icon": Icons.person}
   ];
-  List allpriority = [
+  List allPriority = [
     {"name": "important", "color": AppColors.important},
     {"name": "moderate", "color": AppColors.moderate},
     {"name": "safe", "color": AppColors.safe},
     {"name": "unimportant", "color": AppColors.gray}
     ];
-  TextEditingController task_name = TextEditingController();
-  int task_type = 0;
-  int task_priority = 0;
-  List<Step> steps() => [
+
+  void _selectPriority(int index){
+    Navigator.pop(context);
+    task_priority = index;
+    setState(() {
+    });
+  }
+  void _selectType(int index){
+    Navigator.pop(context);
+    task_type = index;
+    setState(() {
+    });
+  }
+  void _showSelectionPriority(){
+    showModalBottomSheet(context: context, builder: (context) {
+      return SizedBox(
+        height: 300,
+        child: ListView.separated(
+          itemCount: allPriority.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(allPriority[index]["name"]),
+              onTap: ()=> _selectPriority(index)
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const Divider();
+          }
+        ),
+      );
+    });
+  }
+
+ 
+  void _showSelectionType(){
+    showModalBottomSheet(context: context, builder: (context) {
+      return SizedBox(
+        height: 400,
+        child: ListView.separated(
+          itemCount: allType.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(allType[index]["name"]),
+              onTap: ()=> _selectType(index)
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const Divider();
+          }
+        ),
+      );
+    });
+  }
+  void _showPickDateTime(bool type){
+    DateTime init_time = task_time;
+    showModalBottomSheet(context: context, builder: (context){
+      return Column(
+        children: [
+          SizedBox(
+            height: 200,
+            child: CupertinoDatePicker(
+              initialDateTime: init_time,
+              mode: type? CupertinoDatePickerMode.time: CupertinoDatePickerMode.date,
+              onDateTimeChanged: (DateTime value) {  
+                init_time = value;
+              },
+            )
+          ),
+          const SizedBox(height: 50),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+              onPressed: () { 
+                task_time = init_time;
+                Navigator.pop(context); 
+                setState(() {});
+              },
+              child: Container(
+                width: 50,
+                alignment: Alignment.center,
+                child: const Text("Done")
+                ),
+              ),
+              const SizedBox(width: 50),
+              ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.white,
+                onPrimary: AppColors.gray
+              ),
+              onPressed: () { 
+                Navigator.pop(context); 
+                setState(() {});
+              },
+              child: Container(
+                width: 50,
+                alignment: Alignment.center,
+                child: const Text("Cancel")
+                ),
+              )
+            ],
+            
+          )
+        ],
+      );
+    });
+  }
+  void _onChangedRepeat(int index) {
+    task_repeat = index;
+    Navigator.pop(context);
+    setState(() {});
+  }
+  void _showSelectionRepeat(){
+    
+    showModalBottomSheet(context: context, builder: (context) {
+      return SizedBox(
+        height: 400,
+        child: ListView.separated(
+          itemCount: allRepeats.length,
+          itemBuilder: (BuildContext context, int index) => RadioListTile(
+            title: Text(allRepeats[index]), 
+            value: index,
+            groupValue: task_repeat, 
+            onChanged: (value) => _onChangedRepeat(index)
+           
+          ), 
+          separatorBuilder: (BuildContext context, int index) => const Divider(), 
+          
+          )
+      );
+    });
+  }
+  String _getTextDateSelector(){
+    switch(task_repeat) {
+      case 0: return DateFormat.yMd().format(task_time);
+      case 1: return "Daily";
+      case 2:{
+        String result ="";
+        for( int i = 0; i < allDayOfWeekValue.length; i++)
+        {
+          if (allDayOfWeekValue[i]==true) {
+            result += "${allDayOfWeek[i]}, ";
+          }
+        }
+        if (result!=""){
+          result = result.substring(0,result.length - 2);
+          return result;
+        }
+        else{
+          return "Select";
+        }
+      }
+      case 3: {
+        String result ="";
+        for( int i = 0; i < allDayOfMonthValue.length; i++)
+        {
+          if (allDayOfMonthValue[i]==true) {
+            result += "${allDayOfMonth[i]}, ";
+          }
+        }
+        if (result!=""){
+          result = result.substring(0,result.length - 2);
+          return result;
+        }
+        else{
+          return "Select";
+        }
+      }
+      default: return DateFormat.yMd().format(task_time);
+    }
+  }
+  void _getDayPickerAction(){
+    switch (task_repeat) {
+      case 0: return _showPickDateTime(false);
+      case 1: return;
+      case 2: return  _showSelectionRepeatDays(allDayOfWeek, allDayOfWeekValue);
+      case 3: return  _showSelectionRepeatDays(allDayOfMonth, allDayOfMonthValue);
+      default: return;
+    }
+  }
+  void _showSelectionRepeatDays(List allDayOfWeekx, List dayOfWeekValuex){
+    showModalBottomSheet(context: context, builder: (context){
+      return StatefulBuilder(builder: (context, setState2) {
+        return Column(
+          children: [
+          SizedBox(
+            height: 350,
+            width: MediaQuery.of(context).size.width,
+            child: ListView.separated(
+              itemCount: allDayOfWeekx.length,
+              itemBuilder: (BuildContext context, int index) => CheckboxListTile(
+                title: Text(allDayOfWeekx[index]),
+                value: dayOfWeekValuex[index],
+                onChanged: (value) {                
+                  setState2(() {
+                    dayOfWeekValuex[index] = value;
+                  });
+                  setState(() {});
+                }
+      
+              ), separatorBuilder: (BuildContext context, int index) => const Divider(),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                
+              ),
+              child: Container(
+                width: 200,
+                alignment: Alignment.center,
+                child: const Text("OK")
+                ),
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              ),
+          )
+
+          ]
+        );
+      });
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Stepper(
+        currentStep: stepIndex,
+        type: StepperType.horizontal,
+        steps: steps(),
+        onStepContinue: (){
+          if (stepIndex<steps().length-1) {
+            stepIndex++;
+          }
+          setState(() {});
+        },
+        onStepCancel: (){
+          if (stepIndex>0) {
+            stepIndex--;
+          }
+          setState(() {});
+        },
+        onStepTapped: (value) {
+          stepIndex = value;
+          setState(() {});
+        },
+      ),
+
+    );
+  }
+   List<Step> steps() => [
     Step(
       state: stepIndex>0? StepState.complete: stepIndex==0? StepState.editing: StepState.disabled,
       isActive: stepIndex>=0,
@@ -50,9 +313,9 @@ class _AddFormState extends State<AddForm> {
               title: const Text("Priority"),
               trailing: const Icon(Icons.navigate_next),
               subtitle: Text(
-                allpriority[task_priority]["name"], 
+                allPriority[task_priority]["name"], 
                 style: TextStyle(
-                  color: allpriority[task_priority]["color"]
+                  color: allPriority[task_priority]["color"]
                 ),
               ),
               onTap: ()=> _showSelectionPriority()
@@ -62,21 +325,50 @@ class _AddFormState extends State<AddForm> {
           Card(
             child: ListTile(
               title: const Text("Type"),
-              trailing: Icon(alltype[task_type]["icon"]),
-              subtitle: Text(alltype[task_type]["name"]),
+              trailing: Icon(allType[task_type]["icon"]),
+              subtitle: Text(allType[task_type]["name"]),
               onTap: ()=> _showSelectionType(),
             ),
           )
         ]
       )
     ),
+
     Step(
       state:  stepIndex>1? StepState.complete: stepIndex==1? StepState.editing: StepState.disabled,
       isActive: stepIndex>=1,
-      title: Text("Type"),
-      content: Center(
-        child: Text("Type"),
-      ),
+      title: Text("Time"),
+      content: Column(
+        children: [
+          Card(
+            child: ListTile(
+              onTap: ()=> _showPickDateTime(true),
+              iconColor: AppColors.primary,
+              leading: const Icon(Icons.alarm),
+              trailing: const Icon(Icons.navigate_next),
+              title: Text(time_format.format(task_time)),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              iconColor: AppColors.primary,
+              leading: const Icon(Icons.repeat),
+              trailing: const Icon(Icons.navigate_next),
+              title: const Text("Repeat"),
+              subtitle: Text(allRepeats[task_repeat]),
+              onTap: ()=> _showSelectionRepeat()
+            ),
+          ),
+          Card(
+            child: ListTile(
+              iconColor: AppColors.primary,
+              leading: const Icon(Icons.date_range),
+              trailing: const Icon(Icons.navigate_next),
+              title: Text(_getTextDateSelector()),
+              onTap: ()=> _getDayPickerAction(),
+            ),
+          )
+        ],)
     ),
     Step(
       state:  stepIndex>2? StepState.complete: stepIndex==2? StepState.editing: StepState.disabled,
@@ -95,78 +387,4 @@ class _AddFormState extends State<AddForm> {
       ),
     ),
   ];
-  void _selectPriority(int index){
-    Navigator.pop(context);
-    task_priority = index;
-    setState(() {
-    });
-  }
-  void _selectType(int index){
-    Navigator.pop(context);
-    task_type = index;
-    setState(() {
-    });
-  }
-  void _showSelectionPriority(){
-    showModalBottomSheet(context: context, builder: (context) {
-      return ListView.separated(
-        itemCount: allpriority.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(allpriority[index]["name"]),
-            onTap: ()=> _selectPriority(index)
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const Divider();
-        }
-      );
-    });
-  }
-   void _showSelectionType(){
-    showModalBottomSheet(context: context, builder: (context) {
-      return ListView.separated(
-        itemCount: alltype.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(alltype[index]["name"]),
-            onTap: ()=> _selectType(index)
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const Divider();
-        }
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Stepper(
-        currentStep: stepIndex,
-        type: StepperType.horizontal,
-        steps: steps(),
-        onStepContinue: (){
-          if (stepIndex<steps().length-1) {
-            print(task_name.text);
-            stepIndex++;
-          }
-          setState(() {});
-        },
-        onStepCancel: (){
-          if (stepIndex>0) {
-            stepIndex--;
-          }
-          setState(() {});
-        },
-        onStepTapped: (value) {
-          stepIndex = value;
-          setState(() {});
-        },
-      ),
-
-    );
-  }
 }

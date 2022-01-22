@@ -4,7 +4,6 @@ class DatabaseHelper{
   late Database _database;
 
   Future<Database> get database async{
-    print("get database");
     if (_database == null){
       return _database;
     }
