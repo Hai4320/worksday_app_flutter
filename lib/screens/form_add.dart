@@ -12,15 +12,17 @@ class AddForm extends StatefulWidget {
 
 class _AddFormState extends State<AddForm> {
   int stepIndex = 0 ;
-  TextEditingController task_name = TextEditingController();
+  String task_name="";
   int task_type = 0;
   int task_priority = 3;
   DateTime task_time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateFormat time_format = DateFormat.jm();
+  DateFormat timeformat = DateFormat.jm();
   int task_repeat = 0;
+  int task_notification = 0;
   List allRepeats = ["None","Daily","Weekly","Monthly"];
   List allDayOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   List allDayOfWeekValue = [true, false, false, false, false, false, false];
+  List allNotification = ["None","In time","5'","10'","15'","30'","1h"];
   List allDayOfMonth = List<String>.generate(31, (index) => (index+1).toString());
   List allDayOfMonthValue = List<bool>.generate(31, (index) => false);
   List allType = [
@@ -36,19 +38,7 @@ class _AddFormState extends State<AddForm> {
     {"name": "safe", "color": AppColors.safe},
     {"name": "unimportant", "color": AppColors.gray}
     ];
-
-  void _selectPriority(int index){
-    Navigator.pop(context);
-    task_priority = index;
-    setState(() {
-    });
-  }
-  void _selectType(int index){
-    Navigator.pop(context);
-    task_type = index;
-    setState(() {
-    });
-  }
+  TextEditingController nameEditor = TextEditingController();
   void _showSelectionPriority(){
     showModalBottomSheet(context: context, builder: (context) {
       return SizedBox(
@@ -58,7 +48,11 @@ class _AddFormState extends State<AddForm> {
           itemBuilder: (context, index) {
             return ListTile(
               title: Text(allPriority[index]["name"]),
-              onTap: ()=> _selectPriority(index)
+              onTap: (){
+                Navigator.pop(context);
+                task_priority = index;
+                setState(() {});
+              }
             );
           },
           separatorBuilder: (context, index) {
@@ -79,7 +73,11 @@ class _AddFormState extends State<AddForm> {
           itemBuilder: (context, index) {
             return ListTile(
               title: Text(allType[index]["name"]),
-              onTap: ()=> _selectType(index)
+              onTap: (){
+                Navigator.pop(context);
+                task_type = index;
+                setState(() {});   
+              }
             );
           },
           separatorBuilder: (context, index) {
@@ -143,23 +141,26 @@ class _AddFormState extends State<AddForm> {
       );
     });
   }
-  void _onChangedRepeat(int index) {
-    task_repeat = index;
+  void _onChangeRadioSelection(int index, int changeIndex) {
+    switch (changeIndex) {
+      case 0: task_repeat = index; break;
+      case 1: task_notification = index; break;
+    }
     Navigator.pop(context);
     setState(() {});
   }
-  void _showSelectionRepeat(){
+  void _showSelectionByRadio(List data, int groupValue, int changeIndex){
     
     showModalBottomSheet(context: context, builder: (context) {
       return SizedBox(
-        height: 400,
+        height: data.length<5? data.length*80: 400,
         child: ListView.separated(
-          itemCount: allRepeats.length,
+          itemCount: data.length,
           itemBuilder: (BuildContext context, int index) => RadioListTile(
-            title: Text(allRepeats[index]), 
+            title: Text(data[index]), 
             value: index,
-            groupValue: task_repeat, 
-            onChanged: (value) => _onChangedRepeat(index)
+            groupValue: groupValue, 
+            onChanged: (value) => _onChangeRadioSelection(index,changeIndex)
            
           ), 
           separatorBuilder: (BuildContext context, int index) => const Divider(), 
@@ -168,6 +169,7 @@ class _AddFormState extends State<AddForm> {
       );
     });
   }
+
   String _getTextDateSelector(){
     switch(task_repeat) {
       case 0: return DateFormat.yMd().format(task_time);
@@ -297,7 +299,8 @@ class _AddFormState extends State<AddForm> {
       content: Column(
         children: [
           TextFormField(
-            controller: task_name,
+            controller: nameEditor,
+            onChanged: (value) => task_name = value,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: "Task name"
@@ -346,7 +349,7 @@ class _AddFormState extends State<AddForm> {
               iconColor: AppColors.primary,
               leading: const Icon(Icons.alarm),
               trailing: const Icon(Icons.navigate_next),
-              title: Text(time_format.format(task_time)),
+              title: Text(timeformat.format(task_time)),
             ),
           ),
           Card(
@@ -356,7 +359,7 @@ class _AddFormState extends State<AddForm> {
               trailing: const Icon(Icons.navigate_next),
               title: const Text("Repeat"),
               subtitle: Text(allRepeats[task_repeat]),
-              onTap: ()=> _showSelectionRepeat()
+              onTap: ()=> _showSelectionByRadio(allRepeats, task_repeat, 0)
             ),
           ),
           Card(
@@ -373,18 +376,76 @@ class _AddFormState extends State<AddForm> {
     Step(
       state:  stepIndex>2? StepState.complete: stepIndex==2? StepState.editing: StepState.disabled,
       isActive: stepIndex>=2,
-      title: Text("Repeat"),
-      content: Center(
-        child: Text("Repeat"),
-      ),
+      title: Text("Notify"),
+      content: Column(
+        children: [
+          Card(
+            child: ListTile(
+              iconColor: AppColors.primary,
+              leading: const Icon(Icons.notifications),
+              trailing: const Icon(Icons.navigate_next),
+              title: const Text("Notification"),
+              subtitle: Text(allNotification[task_notification]),
+              onTap: ()=> _showSelectionByRadio(allNotification,task_notification,1),
+            ),
+          ),
+           Card(
+            child: ListTile(
+              iconColor: AppColors.primary,
+              leading: const Icon(Icons.music_note),
+              trailing: const Icon(Icons.navigate_next),
+              title: const Text("Ringtone"),
+              subtitle: const Text("Default"),
+              onTap: (){},
+            ),
+          )
+        ],
+      )
     ),
      Step(
       state:  stepIndex>3? StepState.complete: stepIndex==3? StepState.editing: StepState.disabled,
       isActive: stepIndex>=3,
-      title: Text("Alert"),
-      content: Center(
-        child: Text("Alert"),
-      ),
+      title: const Text("Confirm"),
+      content: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              ["Name:",task_name],
+              ["Priority:",allPriority[task_priority]["name"]],
+              ["Type:", allType[task_type]["name"]],
+              ["Time:",timeformat.format(task_time)],
+              ["Day:", _getTextDateSelector()],
+              ["Notification:", allNotification[task_notification]]
+
+              ].map(
+              (cf) => Container(
+                margin: const EdgeInsets.all(5),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 110,
+                      child: Text(
+                        cf[0], 
+                        style: TextStyle(color: AppColors.black, fontSize: 17, fontWeight: FontWeight.bold)
+                        ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width-200,
+                      child: Text(
+                        cf[1],
+                        style: TextStyle(color: AppColors.black, fontSize: 17),
+                        ),
+                    )
+                  ]
+                ),
+              ),
+            ).toList() 
+              
+          ),
+        )
+      )
     ),
   ];
 }
