@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "package:worksday_app/models/task_model.dart";
+import 'package:worksday_app/models/task.dart';
 import "package:worksday_app/models/data.dart";
 import 'package:worksday_app/themes/color.dart'; 
 
@@ -19,7 +19,7 @@ class _WorkState extends State<WeekWorks> {
 
     double scWidth = MediaQuery.of(context).size.width;
     createListTaskEx(int length){
-      Task task_ex = Task(0, "0", "Công việc X", "Home", 2, 5); 
+      Task task_ex = Task("0", "Công việc X", 1, 2, 5); 
       List<Task> listTask = List<Task>.generate(length, (index) => task_ex);
       return listTask;
     }

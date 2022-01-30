@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:worksday_app/models/data.dart";
-import "package:worksday_app/models/task_model.dart";
+import 'package:worksday_app/models/task.dart';
 import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/widgets/stateful/checkbox.dart';
 

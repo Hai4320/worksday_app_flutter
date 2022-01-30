@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:worksday_app/themes/color.dart'; 
-import "package:worksday_app/models/task_model.dart";
+import 'package:worksday_app/models/task.dart';
 
 class MonthWorks extends StatefulWidget {
   const MonthWorks({ Key? key }) : super(key: key);
@@ -11,7 +11,7 @@ class MonthWorks extends StatefulWidget {
 
 class _MonthWorksState extends State<MonthWorks> {
   taskEx(String name , int day){
-      Task task_ex = Task(0, day.toString() , name, "Home", 1, 5);   
+      Task task_ex = Task(day.toString() , name, 1, 1, 5);   
       return task_ex;
   }
   @override
