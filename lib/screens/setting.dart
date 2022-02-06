@@ -80,6 +80,34 @@ class _SettingState extends State<Setting> {
                 return ListTile(
                   title: Text(typeData.name),
                   subtitle: Text(typeData.color),
+                  tileColor: Color(int.parse("0xff${typeData.color}")),
+                  onLongPress: (){
+
+                    if (!typeData.isDefault) {
+                      showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text("Delete"),
+                        content: const Text("Do you want to delete this type"),
+                        actions: [
+                          TextButton(
+                            child: const Text("Yes"),
+                            onPressed: (){
+                              typeData.delete();
+                              Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            child: const Text("No"),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                      )
+                      );
+                    }
+                  },
                 );
               }, 
               separatorBuilder: (_,index) => const Divider(), 
@@ -93,7 +121,6 @@ class _SettingState extends State<Setting> {
 
   @override
   void initState(){
-
     super.initState();
     typeBox = Hive.box<TypeTask>('typetask');
   }

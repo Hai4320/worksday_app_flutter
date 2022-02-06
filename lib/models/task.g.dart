@@ -89,17 +89,19 @@ class TypeTaskAdapter extends TypeAdapter<TypeTask> {
     return TypeTask(
       name: fields[0] as String,
       color: fields[1] as String,
-    );
+    )..isDefault = fields[2] as bool;
   }
 
   @override
   void write(BinaryWriter writer, TypeTask obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.color);
+      ..write(obj.color)
+      ..writeByte(2)
+      ..write(obj.isDefault);
   }
 
   @override

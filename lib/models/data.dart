@@ -36,6 +36,11 @@ class AppDatas{
     AppValue(index: 15, value: "15'"),
     AppValue(index: 30, value: "30'"),
     AppValue(index: 60, value: "1h"),
+  ];
+  static final List<TypeTask> initTypes = [
+    TypeTask(name: "Personal",color: 'FFF323'),
+    TypeTask(name: "Home", color: 'E84545'),
+    TypeTask(name: "Company", color: '1FAB89'),
     
   ];
 }

@@ -71,5 +71,14 @@ class TypeTask extends HiveObject{
 
   @HiveField(1)
   String color="";
+
+  @HiveField(2)
+  bool isDefault = false;
+
   TypeTask({required this.name, required this.color});
+
+  void setDefault(bool x){
+    isDefault = x;
+  }
+
 }
