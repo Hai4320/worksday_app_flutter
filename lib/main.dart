@@ -9,7 +9,8 @@ import 'package:worksday_app/screens/form_add.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'models/data.dart';
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TypeTaskAdapter());
@@ -18,7 +19,6 @@ void main() async{
   await Hive.openBox<Task>('task');
   runApp(MyApp());
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -29,17 +29,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     Box<TypeTask> typeBox = Hive.box('typetask');
-    if (typeBox.isEmpty){
-      for (int i = 0; i <AppDatas.initTypes.length; i++) {
+    if (typeBox.isEmpty) {
+      for (int i = 0; i < AppDatas.initTypes.length; i++) {
         var temp = AppDatas.initTypes[i];
-        temp.setDefault(true); 
+        temp.setDefault(true);
         typeBox.put(i, temp);
       }
     }
   }
+
   @override
   void dispose() {
     Hive.close();
@@ -62,4 +63,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

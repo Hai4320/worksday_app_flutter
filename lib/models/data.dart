@@ -1,6 +1,7 @@
 import 'package:worksday_app/models/priority.dart';
 import 'package:worksday_app/models/task.dart';
-class AppDatas{
+
+class AppDatas {
   static List<Task> task_data = [
     Task("0", "Công việc X", 1, 2, 5),
     Task("0", "Họp nhóm ABC", 4, 1, 5),
@@ -15,18 +16,17 @@ class AppDatas{
   ];
 
   static final List<Priority> initPrioritys = [
-    Priority(0,"important","FF5959"),
-    Priority(1,"moderate","FFE400"),
-    Priority(2,"safe","64C9CF"),
-    Priority(3,"unimportant","8CA1A5"),
+    Priority(0, "important", "FF5959"),
+    Priority(1, "moderate", "FFE400"),
+    Priority(2, "safe", "64C9CF"),
+    Priority(3, "unimportant", "8CA1A5"),
   ];
 
   static final List<AppValue> initRepeats = [
-    AppValue(index: 0, value:"None"),
-    AppValue(index: 1, value:"Daily"),
-    AppValue(index: 2, value:"Weekly"),
-    AppValue(index: 3, value:"Monthly"),
-
+    AppValue(index: 0, value: "None"),
+    AppValue(index: 1, value: "Daily"),
+    AppValue(index: 2, value: "Weekly"),
+    AppValue(index: 3, value: "Monthly"),
   ];
   static final List<AppValue> initNotices = [
     AppValue(index: -1, value: "None"),
@@ -38,13 +38,13 @@ class AppDatas{
     AppValue(index: 60, value: "1h"),
   ];
   static final List<TypeTask> initTypes = [
-    TypeTask(name: "Personal",color: 'FFF323'),
+    TypeTask(name: "Personal", color: 'FFF323'),
     TypeTask(name: "Home", color: 'E84545'),
     TypeTask(name: "Company", color: '1FAB89'),
-    
   ];
 }
-class AppValue{
+
+class AppValue {
   int index;
   String value;
   AppValue({required this.index, required this.value});

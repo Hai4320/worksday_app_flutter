@@ -1,5 +1,5 @@
 import "package:hive/hive.dart";
-
+import 'package:intl/intl.dart';
 part 'task.g.dart';
 
 @HiveType(typeId: 0)
@@ -46,6 +46,7 @@ class Task {
   Task( this.time, this.taskname, this.type, this.priority, this.noticetime);
   
   void setRepeat(int indexRepeat, List li){
+    repeat = indexRepeat;
     switch (indexRepeat) {
       case 2: return setRepeatArray(li,7);
       case 3: return setRepeatArray(li,31);
@@ -57,6 +58,16 @@ class Task {
     int size = li.length<days? li.length:days;
     for (int i = 0; i < size; i++){
       repeatMonth[i] = li[i];
+    }
+  }
+  String showRepeatDayOfTask() {
+    DateTime datetime = DateTime.parse(time);
+    switch (repeat) {
+      case 0: return DateFormat("dd/MM/yyyy").format(datetime);
+      case 1: return "Daily";
+      case 2: return "Weekly";
+      case 3: return "Monthly";
+      default: return DateFormat("dd/MM/yyyy").format(datetime);
     }
   }
 }
