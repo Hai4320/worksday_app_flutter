@@ -17,7 +17,6 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
     TextEditingController typeController = TextEditingController();
     TextEditingController colorController = TextEditingController();
-    print(typeBox.get(0));
     return Scaffold(
       appBar: AppBar(
         title: Text("Setting"),

@@ -34,15 +34,12 @@ class _HomeState extends State<Home> {
                 )),
           ),
         ),
-        body: ListView(children: [
+        body: Column(children: [
           _buildTabBar(),
           const SizedBox(
             height: 10,
           ),
           _buildGridTask(),
-          const SizedBox(
-            height: 100,
-          ),
         ]));
   }
 
@@ -146,7 +143,7 @@ class _HomeState extends State<Home> {
     var size = MediaQuery.of(context).size;
     return SizedBox(
       width: size.width,
-      
+      height: size.height*0.8,
       child: ValueListenableBuilder(
         valueListenable: taskBox.listenable(),
         builder: (context, Box alltasks, _) {
@@ -157,6 +154,7 @@ class _HomeState extends State<Home> {
           } else {
             List items = alltasks.values.toList();
             return GridView.builder(
+                
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.65,
@@ -164,8 +162,7 @@ class _HomeState extends State<Home> {
                 itemCount: items.length,
                 shrinkWrap: true,
                 primary: false,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(bottom: 80),
                 itemBuilder: (context, i) => _buildTaskItem(items[i],i)
               );
           }
@@ -175,6 +172,7 @@ class _HomeState extends State<Home> {
   }
 
   _buildTaskItem(Task task,int key) {
+    var taskType = typeBox.get(task.type);
     DateTime taskTime = DateTime.parse(task.time);
     Color taskColor =
         Color(int.parse("0xff${AppDatas.initPrioritys[task.priority].color}"));
@@ -216,9 +214,16 @@ class _HomeState extends State<Home> {
                       size: 18,
                     ),
                   ),
-                  Text(task.showRepeatDayOfTask()),
+                  Expanded(
+                    child: Text(
+                      task.showRepeatDayOfTask(), 
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ),
                 ]),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       height: 20,
@@ -237,6 +242,30 @@ class _HomeState extends State<Home> {
                         child: Text(
                           "#${AppDatas.initPrioritys[task.priority].name}", 
                         )
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      child: Container(
+                        height: 20,
+                        padding: const EdgeInsets.only(
+                          left: 5,
+                          right: 5
+                        ),
+                        decoration: BoxDecoration(
+                          color: taskType == null? Colors.transparent: Color(int.parse("0xff${taskType.color}")),
+                          border: Border.all(
+                            color: AppColors.black,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(5)
+                        ),
+                        child: Center(
+                          child: Text(
+                            "#${taskType==null? "Others" : taskType.name}",
+                            overflow: TextOverflow.ellipsis, 
+                          )
+                        ),
                       ),
                     )
                   ]

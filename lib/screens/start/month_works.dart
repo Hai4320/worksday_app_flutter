@@ -17,6 +17,7 @@ class _MonthWorksState extends State<MonthWorks> {
   @override
   
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     DateTime today = DateTime.now();
     List<Task> listTask = [
       taskEx("Xem phim", 1),taskEx("Da Bong", 4),taskEx("boi", 6),
@@ -24,7 +25,7 @@ class _MonthWorksState extends State<MonthWorks> {
       taskEx("Xem kich", 19),taskEx("Mua quan ao", 20),taskEx("Mua ban phim", 20),
       taskEx("Don nha", 21),taskEx("Hop dinh ki", 22),taskEx("Xem phim", 30)];
     return Container(
-      height: 450,
+      height: size.height*0.6,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.semi_white,

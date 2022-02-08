@@ -49,7 +49,7 @@ class _AddFormState extends State<AddForm> {
   List allNotification = AppDatas.initNotices.map((e) => e.value).toList();
   List allDayOfMonth =
       List<String>.generate(31, (index) => (index + 1).toString());
-  List allDayOfMonthValue = List<bool>.generate(31, (index) => false);
+  List<bool> allDayOfMonthValue = List<bool>.generate(31, (index) => false);
   List allType = [
     {"name": "Personal", "icon": Icons.person},
     {"name": "Home", "icon": Icons.person},
@@ -82,7 +82,7 @@ class _AddFormState extends State<AddForm> {
                 task_repeat,
                 task_repeat == 2
                     ? allDayOfWeekValue
-                    : (task_repeat == 3 ? allDayOfMonthValue : []));
+                    : (task_repeat == 3 ? allDayOfMonthValue : [false]));
             taskBox.add(data);
             showDialog(
                 context: context,
@@ -159,8 +159,8 @@ class _AddFormState extends State<AddForm> {
               Card(
                 child: ListTile(
                   title: const Text("Type"),
-                  trailing: Icon(allType[task_type]["icon"]),
-                  subtitle: Text(allType[task_type]["name"]),
+                  trailing: const Icon(Icons.person),
+                  subtitle: Text(typeBox.get(task_type)!.name),
                   onTap: () => _showSelectionType(),
                 ),
               )
@@ -318,13 +318,14 @@ class _AddFormState extends State<AddForm> {
           return SizedBox(
             height: 400,
             child: ListView.separated(
-                itemCount: allType.length,
+                itemCount: typeBox.length,
                 itemBuilder: (context, index) {
+                  var type = typeBox.getAt(index);
                   return ListTile(
-                      title: Text(allType[index]["name"]),
+                      title: Text(type!.name),
                       onTap: () {
                         Navigator.pop(context);
-                        task_type = index;
+                        task_type = type.key;
                         setState(() {});
                       });
                 },

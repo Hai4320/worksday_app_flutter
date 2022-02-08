@@ -43,21 +43,22 @@ class Task {
   @HiveField(12)
   List<bool> repeatMonth = List<bool>.generate(31, (index) => false);
 
+  List<String> dayOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
   Task( this.time, this.taskname, this.type, this.priority, this.noticetime);
   
-  void setRepeat(int indexRepeat, List li){
+  void setRepeat(int indexRepeat, List<bool> li){
     repeat = indexRepeat;
     switch (indexRepeat) {
       case 2: return setRepeatArray(li,7);
       case 3: return setRepeatArray(li,31);
       default: return;
-
     }
   }
-  void setRepeatArray(List li, int days){
+  void setRepeatArray(List<bool> li, int days){
     int size = li.length<days? li.length:days;
     for (int i = 0; i < size; i++){
-      repeatMonth[i] = li[i];
+      days==7? repeatWeek[i] = li[i]: repeatMonth[i] = li[i];
     }
   }
   String showRepeatDayOfTask() {
@@ -65,8 +66,26 @@ class Task {
     switch (repeat) {
       case 0: return DateFormat("dd/MM/yyyy").format(datetime);
       case 1: return "Daily";
-      case 2: return "Weekly";
-      case 3: return "Monthly";
+      case 2: {
+        String result = "Weekly: ";
+          for (int i = 0; i < repeatWeek.length; i++) {
+            if (repeatWeek[i] == true) {
+              result += "${dayOfWeek[i]}, ";
+            }
+          }
+          result = result.substring(0, result.length - 2);
+          return result;
+      }
+      case 3:{
+          String result = "Monthly: ";
+          for (int i = 0; i < repeatMonth.length; i++) {
+            if (repeatMonth[i] == true) {
+              result += "${i+1}, ";
+            }
+          }
+          result = result.substring(0, result.length - 2);
+          return result;
+        }
       default: return DateFormat("dd/MM/yyyy").format(datetime);
     }
   }

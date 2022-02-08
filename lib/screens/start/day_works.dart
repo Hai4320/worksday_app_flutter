@@ -16,8 +16,9 @@ class _DayWorksState extends State<DayWorks> {
   final List<Task> tasks_day = AppDatas.task_data.where((i) => i.time=="0").toList();
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 450,
+      height: size.height*0.6,
       margin: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
       child: ListView.builder(
         itemCount: tasks_day.length-1,

@@ -33,8 +33,9 @@ class _WorkState extends State<WeekWorks> {
       createListTaskEx(3),
       createListTaskEx(5)
     ];
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 450,
+      height: size.height*0.6,
       decoration: BoxDecoration(
         color: AppColors.semi_white,
           borderRadius: BorderRadius.circular(5),
