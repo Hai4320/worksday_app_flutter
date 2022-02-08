@@ -12,7 +12,7 @@ class Add extends StatelessWidget {
     List<Map> add_list = [
       {"name": 'Nomal create', "icon": Icons.add, "color":AppColors.safe, "action": "/AddTask"},
       {"name": 'Advanced create', "icon": Icons.note_add, "color":AppColors.safe,"action":"/AddTask"},
-      {"name": 'Voice create', "icon": Icons.mic, "color":AppColors.safe,"action": "/AddTask"},
+      {"name": 'Voice create', "icon": Icons.mic, "color":AppColors.safe,"action": "/VoiceAdd"},
       {"name": 'With media create', "icon": Icons.photo_camera_back, "color": AppColors.safe,"action": "/AddTask"},
     ];
     var xxx = {

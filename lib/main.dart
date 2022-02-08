@@ -6,7 +6,7 @@ import 'package:worksday_app/screens/start/start.dart';
 import 'package:worksday_app/themes/color.dart';
 import 'package:worksday_app/screens/app.dart';
 import 'package:worksday_app/screens/form_add.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:worksday_app/screens/voice_add.dart';
 
 import 'models/data.dart';
 
@@ -58,6 +58,7 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => const Start(),
         '/App': (context) => const AppWithNav(),
         '/AddTask': (context) => const AddForm(),
+        '/VoiceAdd': (context) => const VoiceAdd(),
       },
       initialRoute: '/',
     );

@@ -42,6 +42,8 @@ dependencies:
   phlox_animations: ^1.0.1
   flutter_lints: ^1.0.0
   path_provider: ^2.0.8
+  speech_to_text: ^5.4.2
+  avatar_glow: ^2.0.2
   
   
   
