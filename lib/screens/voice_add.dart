@@ -1,6 +1,9 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:worksday_app/models/task.dart';
+import 'package:worksday_app/themes/color.dart';
+import 'package:intl/intl.dart';
 
 class VoiceAdd extends StatefulWidget {
   const VoiceAdd({ Key? key }) : super(key: key);
@@ -25,6 +28,21 @@ class _VoiceAddState extends State<VoiceAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Create task by voice"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: TextButton(
+              child: const Text("Done", style: TextStyle(
+                color: Colors.white,
+                fontSize: 18
+              ),),
+              onPressed: (){
+                Task task = Task(DateTime.now().toString(),_text,0,0,0);
+                Navigator.pushNamed(context,"/AddTask",arguments: task);
+              }
+            ),
+          )
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AvatarGlow(
@@ -53,6 +71,7 @@ class _VoiceAddState extends State<VoiceAdd> {
           ),
         ),
       ),
+
     );
   }
   void _listen() async {

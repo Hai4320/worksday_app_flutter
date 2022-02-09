@@ -65,7 +65,15 @@ class _AddFormState extends State<AddForm> {
   @override
   Widget build(BuildContext context) {
     var arg = ModalRoute.of(context)!.settings.arguments;
-    _task = arg is Task ? Task : null;
+    if (arg is Task){
+      task_name = arg.taskname;
+      nameEditor.text = task_name;
+      task_type = arg.type;
+      task_repeat = arg.repeat;
+      task_priority = arg.priority;
+      task_time = DateTime.parse(arg.time);
+
+    }
     return Scaffold(
       appBar: AppBar(),
       body: Stepper(
@@ -133,6 +141,7 @@ class _AddFormState extends State<AddForm> {
             content: Column(children: [
               TextFormField(
                 controller: nameEditor,
+
                 onChanged: (value) => task_name = value,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Task name"),
