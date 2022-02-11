@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,6 +8,8 @@ import 'package:worksday_app/themes/color.dart';
 import 'package:intl/intl.dart';
 import 'package:worksday_app/models/data.dart';
 import 'package:worksday_app/models/priority.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class AddForm extends StatefulWidget {
   const AddForm({Key? key}) : super(key: key);
@@ -16,15 +20,25 @@ class AddForm extends StatefulWidget {
 
 class _AddFormState extends State<AddForm> {
   // init task data
-  late var _task;
+
+  // setting true: has set task argument
+  bool setting = false;
+
+  // editing is true if this is edit task ank key is key of task
+  bool editing = false;
+  int key = 0;
+
+  // 0: nomal form, 1: advance form, 2: form with image.
+  int formType = 0;
+
   String task_name = "";
   int task_type = 0;
   int task_priority = 3;
   DateTime task_time =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   int task_repeat = 0;
   int task_notification = 0;
-
+  String task_image = "";
   DateFormat timeformat = DateFormat.jm();
   int stepIndex = 0;
   List allRepeats = AppDatas.initRepeats.map((e) => e.value).toList();
@@ -64,15 +78,28 @@ class _AddFormState extends State<AddForm> {
 
   @override
   Widget build(BuildContext context) {
-    var arg = ModalRoute.of(context)!.settings.arguments;
-    if (arg is Task){
-      task_name = arg.taskname;
-      nameEditor.text = task_name;
-      task_type = arg.type;
-      task_repeat = arg.repeat;
-      task_priority = arg.priority;
-      task_time = DateTime.parse(arg.time);
-
+    if (setting == false) {
+      var arg = ModalRoute.of(context)!.settings.arguments;
+      var argTask = arg is Map ? arg["task"] : null;
+      var argForm = arg is Map ? arg["form"] : null;
+      var argKey = arg is Map ? arg["key"] : null;
+      if (argTask is Task) {
+        task_name = argTask.taskname;
+        nameEditor.text = task_name;
+        task_type = argTask.type;
+        task_repeat = argTask.repeat;
+        task_priority = argTask.priority;
+        task_time = DateTime.parse(argTask.time);
+        task_image = argTask.image;
+      }
+      if (argForm is int) {
+        formType = argForm;
+      }
+      if (argKey != null) {
+        editing = true;
+        key = argKey;
+      }
+      setting = true;
     }
     return Scaffold(
       appBar: AppBar(),
@@ -91,7 +118,14 @@ class _AddFormState extends State<AddForm> {
                 task_repeat == 2
                     ? allDayOfWeekValue
                     : (task_repeat == 3 ? allDayOfMonthValue : [false]));
-            taskBox.add(data);
+            if (task_image!="") data.image = task_image;
+            if (editing == false) {
+              taskBox.add(data);
+            } else {
+              print("edit");
+              taskBox.putAt(key, data);
+            }
+
             showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
@@ -141,7 +175,6 @@ class _AddFormState extends State<AddForm> {
             content: Column(children: [
               TextFormField(
                 controller: nameEditor,
-
                 onChanged: (value) => task_name = value,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Task name"),
@@ -172,8 +205,33 @@ class _AddFormState extends State<AddForm> {
                   subtitle: Text(typeBox.get(task_type)!.name),
                   onTap: () => _showSelectionType(),
                 ),
+              ),
+              const SizedBox(height: 10),
+              formType !=2 ? Container() : 
+              Card(
+                child: ListTile(
+                  title: const Text("Image"),
+                  subtitle: task_image==""? Text("None") : Text(task_image),
+                  trailing: task_image==""
+                    ? 
+                    const Icon(Icons.photo_camera_back)
+                    : 
+                    Image.file(
+                      File(task_image),
+                      width: 50, 
+                      height: 50, 
+                      fit: BoxFit.cover
+                    ),
+                  onTap: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile? image = await _picker.pickImage(source: ImageSource.gallery); 
+                    if (image != null) task_image = image.path;
+                    setState(() {});
+                  }
+                )
               )
             ])),
+        
         Step(
             state: stepIndex > 1
                 ? StepState.complete
@@ -265,7 +323,7 @@ class _AddFormState extends State<AddForm> {
                 ["Type:", allType[task_type]["name"]],
                 ["Time:", timeformat.format(task_time)],
                 ["Day:", _getTextDateSelector()],
-                ["Notification:", allNotification[task_notification]]
+                ["Notification:", allNotification[task_notification]],
               ]
                       .map(
                         (cf) => Container(
@@ -296,6 +354,7 @@ class _AddFormState extends State<AddForm> {
                       .toList()),
             ))),
       ];
+  
   void _showSelectionPriority() {
     showModalBottomSheet(
         context: context,

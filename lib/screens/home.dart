@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -138,7 +140,18 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+  bool _checkTypeOfTask(Task task) {
+    if (tabIndex == 0) return true; // all type
+    int typeLength = typeBox.length; 
+    var typeOfTab =  (tabIndex > typeLength)? null:  typeBox.getAt(tabIndex-1);
+    var typeOfTask = typeBox.get(task.type);
+     if (typeOfTab==null&& typeOfTask == null) return true; //other type
+    if (typeOfTab==null) return false; // type of tab not found
+    if (typeOfTask == null) return false; // type of task not found and type of task is not other type.
+    if (typeOfTask.key==typeOfTab.key) return true; // the sample type
+    return false; 
 
+  }
   _buildGridTask() {
     var size = MediaQuery.of(context).size;
     return SizedBox(
@@ -146,15 +159,22 @@ class _HomeState extends State<Home> {
       height: size.height*0.8,
       child: ValueListenableBuilder(
         valueListenable: taskBox.listenable(),
-        builder: (context, Box alltasks, _) {
-          if (alltasks.isEmpty) {
+        builder: (context, Box allTasks, _) {
+          if (allTasks.isEmpty) {
             return const Center(
               child: Text('We dont have any type'),
             );
           } else {
-            List items = alltasks.values.toList();
+            List<Task> items=[];
+            List<int> itemsIndex= [];
+            for (int i=0; i<allTasks.length; i++) {
+              Task task = allTasks.getAt(i);
+              if (_checkTypeOfTask(task)==true) {
+                items.add(task);
+                itemsIndex.add(i);
+              }
+            }
             return GridView.builder(
-                
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.65,
@@ -163,7 +183,7 @@ class _HomeState extends State<Home> {
                 shrinkWrap: true,
                 primary: false,
                 padding: const EdgeInsets.only(bottom: 80),
-                itemBuilder: (context, i) => _buildTaskItem(items[i],i)
+                itemBuilder: (context, i) => _buildTaskItem(items[i],itemsIndex[i])
               );
           }
         },
@@ -221,6 +241,16 @@ class _HomeState extends State<Home> {
                     )
                   ),
                 ]),
+                Row(children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.notifications,
+                      size: 18,
+                    ),
+                  ),
+                  Text(AppDatas.initNotices.where((e)=>e.index == task.noticetime).first.value),
+                ]),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,6 +300,14 @@ class _HomeState extends State<Home> {
                     )
                   ]
                 ),
+                const SizedBox(height: 5),
+                task.image!=""? 
+                Expanded(
+                  child: Center(child: Image.file(File(task.image)))
+                )
+                : Container(),
+              
+              const SizedBox(height: 40)
               ],
             ),
             Positioned(
@@ -281,7 +319,16 @@ class _HomeState extends State<Home> {
                     color: Colors.transparent,
                     child: InkWell(
                       focusColor: Colors.white,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          "/AddTask", 
+                          arguments: {
+                            "task": task,
+                            "form": task.image==""?0:2,
+                            "key": key,
+                          } );
+                      },
                       child: Icon(Icons.edit),
                       
                     ),
@@ -294,7 +341,7 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         taskBox.deleteAt(key);
                       },
-                      child: Icon(Icons.delete),
+                      child: const Icon(Icons.delete),
                     ),
                   )
 

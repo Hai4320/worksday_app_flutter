@@ -13,7 +13,7 @@ class Add extends StatelessWidget {
       {"name": 'Nomal create', "icon": Icons.add, "color":AppColors.safe, "action": "/AddTask"},
       {"name": 'Advanced create', "icon": Icons.note_add, "color":AppColors.safe,"action":"/AddTask"},
       {"name": 'Voice create', "icon": Icons.mic, "color":AppColors.safe,"action": "/VoiceAdd"},
-      {"name": 'With media create', "icon": Icons.photo_camera_back, "color": AppColors.safe,"action": "/AddTask"},
+      {"name": 'With image create', "icon": Icons.photo_camera_back, "color": AppColors.safe,"action": "/AddTask", "arguments":{"form": 2}},
     ];
     var xxx = {
       "name": 'Nomal create', "icon": Icons.add, "color":AppColors.safe
@@ -51,7 +51,7 @@ class Add extends StatelessWidget {
                         leading: Icon(add_list[idx]["icon"]),
                         title: Text(add_list[idx]["name"]),
                         trailing: const Icon(Icons.navigate_next),
-                        onTap: ()=> Navigator.pushNamed(context, add_list[idx]["action"]),
+                        onTap: ()=> Navigator.pushNamed(context, add_list[idx]["action"], arguments: add_list[idx]["arguments"]),
                       ),
                     ),
                   );

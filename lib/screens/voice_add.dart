@@ -38,7 +38,15 @@ class _VoiceAddState extends State<VoiceAdd> {
               ),),
               onPressed: (){
                 Task task = Task(DateTime.now().toString(),_text,0,0,0);
-                Navigator.pushNamed(context,"/AddTask",arguments: task);
+                Navigator.pushNamed(
+                  context,
+                  "/AddTask",
+                  arguments: 
+                  {
+                    "task": task,
+                    "form": 0,
+                  }
+                );
               }
             ),
           )

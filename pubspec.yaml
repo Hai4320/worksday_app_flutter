@@ -44,6 +44,7 @@ dependencies:
   path_provider: ^2.0.8
   speech_to_text: ^5.4.2
   avatar_glow: ^2.0.2
+  image_picker: ^0.8.4+8
   
   
   
