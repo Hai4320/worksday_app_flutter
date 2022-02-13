@@ -1,16 +1,9 @@
 # worksday_app
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This is my first app with flutter. It's mainly used to get used to flutter so it has a lot of code flaws. \
+In the project I used some libraries:
+ - image_picker: get image from gallery
+ - speech_to_text: cover speech text. 
+ - intl: datetime.
+ - phlox_animations: get used to animation.
+ - hive, hive_flutter: hive database.
